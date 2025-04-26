@@ -13,17 +13,14 @@ RUN a2enmod rewrite
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy composer terlebih dahulu
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# Copy semua source code DULU
+COPY . .
 
-# Copy file composer.json dan composer.lock dulu (biar cache build lebih cepat)
-COPY composer.json composer.lock ./
+# Copy Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Install dependency PHP
 RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
-
-# Copy seluruh source code
-COPY . .
 
 # Ubah permission
 RUN chown -R www-data:www-data /var/www/html
